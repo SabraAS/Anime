@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap');
+
+//mixin by: https://codepen.io/eduardoboucas/pen/YXxmwv
+@mixin responsive-font($responsive, $min, $max: false, $fallback: false) {
+  $responsive-unitless: $responsive / ($responsive - $responsive + 1);
+  $dimension: if(unit($responsive) == 'vh', 'height', 'width');
+  $min-breakpoint: $min / $responsive-unitless * 100;
+
+  @media (max-#{$dimension}: #{$min-breakpoint}) {
+    font-size: $min;
+  }
+
+  @if $max {
+    $max-breakpoint: $max / $responsive-unitless * 100;
+
+    @media (min-#{$dimension}: #{$max-breakpoint}) {
+      font-size: $max;
+    }
+  }
+
+  @if $fallback {
+    font-size: $fallback;
+  }
+
+  font-size: $responsive;
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+}
+
+.logo {
+  height: 50%;
+  pointer-events: none;
+  margin-left: 2%;
+  &__white {
+    width: 20vw;
+    min-width: 180px;
+  }
+}
+
+.banner{
+  width: 100%;
+  height: 92vh;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(360deg, rgba(255, 0, 0, 0.69) 0%, rgba(41, 0, 0, 0.51) 100%), url("../assets/Banner.png");
+  background-position: 70% 30%;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  &__container{
+    position: absolute;
+    top: 30%;
+    height: 35vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+      &--text{
+        margin: 0;
+        &.text {
+          @include responsive-font(2.5vw, 24px, 80px);
+          text-transform: uppercase;
+          color: #FFF;
+          font-style: italic;
+          font-weight: 300;
+          letter-spacing: 0.125em;
+          text-align: center;
+        }
+      }
+  }
+  &--arrow{
+    margin-bottom: 3%;
+    color: #FED500;
+    font-size: 36px;
+  }
+}
+
+.slider {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-content: center;
+  width: 100%;
+  height: 20vh;
+  &__buttons{
+    &--next {
+      margin-right: 2vw;
+      border: none;
+      background: #fff;
+      color: #000;
+      font-size: 18px;
+    }
+    &--prev {
+      margin-left: 2vw;
+      border: none;
+      background: #fff;
+      color: #000;
+      font-size: 18px;
+    }
+  }
+}
+.wrapper {
+  width: 30vw;
+  overflow: hidden;
+}
+#slider ul {
+  position: relative;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  list-style: none;
+}
+#slider ul li {
+  position: relative;
+  float: left;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 30vw;
+  text-align: center;
+  @include responsive-font(2vw, 24px, 60px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 42px;
+  letter-spacing: 0.125em;
+  height: 100%;
+}
+
+#slider ul li p {
+  margin: 0;
+}
+
+.header {
+  height: 8vh;
+  width: 100%;
+  &__container{
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .container{
+      margin-right: 2%;
+      width: 10%;
+      min-width: 100px;
+      &__buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        .button{
+          cursor: pointer;
+          border: none;
+          background: none;
+          padding: 0;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
