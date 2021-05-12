@@ -49,78 +49,110 @@ function Banner() {
   </div>
 }
 
-function moveLeft() {
-    const slideCount = document.getElementById("slider").getElementsByTagName("li").length;
-    const arr = document.getElementById("slider").getElementsByTagName("li")
-    for (let i = 0; i < 3; i++) {
-        arr[i].style.display = 'flex';
+class Carousel extends React.Component {
+    constructor(props) {
+        super(props)
+        let items = JSON.parse(JSON.stringify(this.props.items))
+        if (items.length === 2) {
+            items.push(items[0])
+            items.push(items[1])
+        }
+        this.state = {
+            items: [...items]
+        }
     }
-    const swipeLeft = [
-        {transform: 'translateX(0)'},
-        {transform: 'translateX(-30%)'}
-    ];
-    const ul = document.getElementById('ul');
-    const li_first = ul.firstElementChild;
-    ul.animate(
-        swipeLeft,
-        1500).onfinish = function () {
-        ul.appendChild(li_first);
-    };
-    for (let i = 3; i < slideCount; i++) {
-        arr[i].style.display = 'none';
+
+    rearrangeItemsLeft = () => {
+        let arr = JSON.parse(JSON.stringify(this.state.items))
+        const arrSize = arr.length
+        let first = arr[0]
+        for (let i = 0; i <arrSize-1; i++) {
+            arr[i] = arr[i+1]
+        }
+        arr[arrSize-1] = first
+        this.setState({
+            items: arr
+        })
     }
-};
 
-function moveRight() {
-    const swipeLeft = [
-        {transform: 'translateX(0)'},
-        {transform: 'translateX(30%)'}
-    ];
-    const ul = document.getElementById('ul');
-    const li_last = ul.lastElementChild;
-    ul.animate(
-        swipeLeft,
-        1000).onfinish = function () {
-        ul.prepend(li_last);
-    };
-};
-
-function Slider() {
-    setInterval(function () {
-        moveLeft();
-    }, 5000);
-
-    const resize = function () {
-        const slideWidth = document.getElementById("slider").getElementsByTagName("li")[1].offsetWidth;
-        const slideCount = document.getElementById("slider").getElementsByTagName("li").length;
-        const slideHeight = document.getElementById("slider").getElementsByTagName("li")[1].offsetHeight;
-        const sliderUlWidth = slideCount * slideWidth;
-        document.getElementById("slider").style.width = slideWidth.toString();
-        document.getElementById("slider").style.height = slideHeight.toString();
-        document.getElementById("ul").style.width = sliderUlWidth.toString();
-        const ml = -slideWidth+'px'
-        document.getElementById("ul").style.marginLeft = ml.toString();
+    rearrangeItemsRight = () => {
+        let arr = JSON.parse(JSON.stringify(this.state.items))
+        const arrSize = arr.length
+        let last = arr[arrSize-1]
+        for (let i = arrSize-1; i > 0; i--) {
+            arr[i] = arr[i-1]
+        }
+        arr[0] = last
+        this.setState({
+            items: arr
+        })
     }
-    resize();
-    window.addEventListener('resize', resize, true);
-}
 
-function Carousel() {
-  return <div id="slider" className="slider">
-      <button type="button" className="slider__buttons--prev"  onClick={moveRight}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
-      <div className="wrapper">
-          <ul id="ul">
-              <li><p>HOJE: MY HERO ACADEMIA</p></li>
-              <li><p>amanhã: my hero academia - ep133 </p></li>
-              <li><p>Novos episódio disponível: my hero academia </p></li>
-          </ul>
-     </div>
-      <button type="button" className="slider__buttons--next"  onClick={moveLeft}>
-          <FontAwesomeIcon id="faRight" icon={faChevronRight} />
-      </button>
-  </div>
+    moveLeft = () => {
+        const swipeLeft = [
+            {transform: 'translateX(0)'},
+            {transform: 'translateX(-30%)'}
+        ]
+        const ul = document.getElementById('ul')
+        ul.animate(
+            swipeLeft,
+            2000).onfinish = this.rearrangeItemsLeft
+    }
+
+    moveRight = () => {
+        const swipeLeft = [
+            {transform: 'translateX(0)'},
+            {transform: 'translateX(30%)'}
+        ]
+        const ul = document.getElementById('ul')
+        ul.animate(
+            swipeLeft,
+            2000).onfinish = this.rearrangeItemsRight
+    }
+
+    interval () {
+        setInterval(this.moveLeft, 6000)
+
+        const resize = function () {
+           const slideWidth = document.getElementById("slider").getElementsByTagName("li")[1].offsetWidth
+           const slideCount = document.getElementById("slider").getElementsByTagName("li").length
+           const slideHeight = document.getElementById("slider").getElementsByTagName("li")[1].offsetHeight
+           const sliderUlWidth = slideCount * slideWidth
+           document.getElementById("slider").style.width = slideWidth.toString()
+           document.getElementById("slider").style.height = slideHeight.toString()
+           document.getElementById("ul").style.width = sliderUlWidth.toString()
+           const ml = -slideWidth+'px'
+           document.getElementById("ul").style.marginLeft = ml.toString()
+        }
+        resize()
+        window.addEventListener('resize', resize, true)
+    }
+
+    componentDidMount() {
+        this.interval()
+    }
+
+    render() {
+        return (
+            <div id="slider" className="slider">
+                <button type="button" className="slider__buttons--prev" onClick={this.moveRight.bind(this)}>
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                </button>
+                <div className="wrapper">
+                    <ul id="ul">
+                        {this.state.items.map( (item, index) => (
+                            <li  key={index}>
+                                <p>{item}</p>
+                            </li>
+                        ))}x
+                    </ul>
+                </div>
+                <button type="button" className="slider__buttons--next" onClick={this.moveLeft.bind(this)}>
+                    <FontAwesomeIcon id="faRight" icon={faChevronRight} />
+                </button>
+            </div>
+        )
+    }
 }
 
 function Bar () {
@@ -137,7 +169,7 @@ function Item (props) {
             <p className="item__text--description">{props.text}</p>
         </div>
     </div>
-};
+}
 
 function Details () {
     return <div className="details">
@@ -159,9 +191,6 @@ function Bottom () {
 }
 
 class Main extends React.Component {
-    componentDidMount() {
-        Slider();
-    }
     render() {
         return (
             <div className="App">
@@ -170,14 +199,15 @@ class Main extends React.Component {
                 </header>
                 <div className="body">
                     <Banner/>
-                    <Carousel/>
+                    <Carousel items={['hoje: my hero academia - ep132 ', 'amanhã: my hero academia - ep133', 'Novos episódio disponível: my hero academia']}/>
                     <Bar/>
                     <Details/>
                     <Bottom/>
+
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default Main;
+export default Main
