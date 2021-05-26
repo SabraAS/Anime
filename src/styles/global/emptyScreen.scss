@@ -1,0 +1,22 @@
+.empty{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &__icon{
+    color: #969696;
+    height: 35px !important;
+    width: 35px !important;
+    border-radius: 0;
+  }
+  &__text{
+    margin-top: 26px;
+    font-size: 31px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 0.125em;
+    text-align: center;
+    color: #969696;
+  }
+}

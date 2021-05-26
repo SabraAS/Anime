@@ -1,0 +1,23 @@
+@import "./global/carrossel";
+@import "./global/footer";
+@import "./global/navbar";
+@import "./global/emptyScreen";
+@import "./global/footer";
+@import "./global/sideNavBar";
+@import "./pages/homepage";
+@import "./pages/list";
+@import "./pages/categories";
+@import "./pages/config";
+@import "./pages/info";
+@import "./pages/top10";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,300;1,700&display=swap');
+
+* {
+  font-family: Roboto;
+}
+
+body {
+  position: relative;
+  margin: 0;
+}
