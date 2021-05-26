@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import logoWhite from '../assets/logo white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,9 +7,6 @@ import {faArrowDown, faDragon, faInfinity} from "@fortawesome/free-solid-svg-ico
 
 //components import
 import Carrossel from "../global/carrossel";
-import Footer from "../global/footer";
-import Navbar from "../global/navbar";
-import SideNavBar from "../global/sideNavBar";
 
 function Banner() {
     return <div className="banner">

@@ -1,38 +1,47 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
-function Carrossel (props) {
-    let itemsProp = JSON.parse(JSON.stringify(props.items))
-    if (itemsProp.length === 2) {
-        itemsProp.push(itemsProp[0])
-        itemsProp.push(itemsProp[1])
+class Carrossel extends React.Component {
+    constructor(props) {
+        super(props)
+        let items = JSON.parse(JSON.stringify(this.props.items))
+        if (items.length === 2) {
+            items.push(items[0])
+            items.push(items[1])
+        }
+        this.state = {
+            items: [...items]
+        }
     }
-    const [items, setItems] = useState([...itemsProp]);
 
-    function rearrangeItemsLeft () {
-        let arr = JSON.parse(JSON.stringify(items))
+    rearrangeItemsLeft = () => {
+        let arr = JSON.parse(JSON.stringify(this.state.items))
         const arrSize = arr.length
         let first = arr[0]
         for (let i = 0; i <arrSize-1; i++) {
             arr[i] = arr[i+1]
         }
         arr[arrSize-1] = first
-        setItems(arr)
+        this.setState({
+            items: arr
+        })
     }
 
-    function rearrangeItemsRight (){
-        let arr = JSON.parse(JSON.stringify(items))
+    rearrangeItemsRight = () => {
+        let arr = JSON.parse(JSON.stringify(this.state.items))
         const arrSize = arr.length
         let last = arr[arrSize-1]
         for (let i = arrSize-1; i > 0; i--) {
             arr[i] = arr[i-1]
         }
         arr[0] = last
-        setItems(arr)
+        this.setState({
+            items: arr
+        })
     }
 
-    function moveLeft () {
+    moveLeft = () => {
         const swipeLeft = [
             {transform: 'translateX(0)'},
             {transform: 'translateX(-30%)'}
@@ -41,11 +50,11 @@ function Carrossel (props) {
         if(ul) {
             ul.animate(
                 swipeLeft,
-                2000).onfinish = rearrangeItemsLeft
+                2000).onfinish = this.rearrangeItemsLeft
         }
     }
 
-    function moveRight () {
+    moveRight = () => {
         const swipeLeft = [
             {transform: 'translateX(0)'},
             {transform: 'translateX(30%)'}
@@ -54,54 +63,55 @@ function Carrossel (props) {
         if(ul) {
             ul.animate(
                 swipeLeft,
-                2000).onfinish = rearrangeItemsRight
+                2000).onfinish = this.rearrangeItemsRight
         }
     }
 
-    function interval () {
-        setInterval(moveLeft, 6000)
+    interval () {
+        setInterval(this.moveLeft, 6000)
 
-        const car = document.getElementById("carrossel")
-        if(car) {
-            const resize = function () {
-                const slideWidth = document.getElementById("carrossel").getElementsByTagName("li")[1].offsetWidth
-                const slideCount = document.getElementById("carrossel").getElementsByTagName("li").length
-                const slideHeight = document.getElementById("carrossel").getElementsByTagName("li")[1].offsetHeight
-                const carrosselUlWidth = slideCount * slideWidth
-                document.getElementById("carrossel").style.width = slideWidth.toString()
-                document.getElementById("carrossel").style.height = slideHeight.toString()
-                document.getElementById("ul").style.width = carrosselUlWidth.toString()
-                const ml = -slideWidth + 'px'
-                document.getElementById("ul").style.marginLeft = ml.toString()
+        const resize = function () {
+            if(document.getElementById("carrossel")) {
+            const slideWidth = document.getElementById("carrossel").getElementsByTagName("li")[1].offsetWidth
+            const slideCount = document.getElementById("carrossel").getElementsByTagName("li").length
+            const slideHeight = document.getElementById("carrossel").getElementsByTagName("li")[1].offsetHeight
+            const carrosselUlWidth = slideCount * slideWidth
+            document.getElementById("carrossel").style.width = slideWidth.toString()
+            document.getElementById("carrossel").style.height = slideHeight.toString()
+            document.getElementById("ul").style.width = carrosselUlWidth.toString()
+            const ml = -slideWidth+'px'
+            document.getElementById("ul").style.marginLeft = ml.toString()
             }
-            resize()
-            window.addEventListener('resize', resize, true)
         }
+        resize()
+        window.addEventListener('resize', resize, true)
     }
 
-    useEffect( () => {
-        interval()
-    })
+    componentDidMount() {
+        this.interval()
+    }
 
-    return (
-        <div id="carrossel" className="carrossel">
-            <button type="button" className="carrossel__buttons--prev" onClick={moveRight}>
-                <FontAwesomeIcon icon={faChevronLeft} />
-            </button>
-            <div className="wrapper">
-                <ul id="ul">
-                    {items.map( (item, index) => (
-                        <li  key={index}>
-                            <p>{item}</p>
-                        </li>
-                    ))}x
-                </ul>
+    render() {
+        return (
+            <div id="carrossel" className="carrossel">
+                <button type="button" className="carrossel__buttons--prev" onClick={this.moveRight.bind(this)}>
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                </button>
+                <div className="wrapper">
+                    <ul id="ul">
+                        {this.state.items.map( (item, index) => (
+                            <li  key={index}>
+                                <p>{item}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <button type="button" className="carrossel__buttons--next" onClick={this.moveLeft.bind(this)}>
+                    <FontAwesomeIcon id="faRight" icon={faChevronRight} />
+                </button>
             </div>
-            <button type="button" className="carrossel__buttons--next" onClick={moveLeft}>
-                <FontAwesomeIcon id="faRight" icon={faChevronRight} />
-            </button>
-        </div>
-    )
+        )
+    }
 }
 
 export default Carrossel;
