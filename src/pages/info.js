@@ -12,12 +12,14 @@ function ImagesGroup (props) {
 
     function moveLeft () {
         const imgs = [...images]
+        console.log(imgs)
         let first = imgs.shift()
         imgs.push(first)
         setImages(imgs)
     }
     function moveRight () {
         const imgs = [...images]
+        console.log(imgs)
         let last = imgs.pop()
         imgs.unshift(last)
         setImages(imgs)
@@ -84,7 +86,7 @@ function Info () {
     return (
         <div className="info">
             <div className="info__content">
-                <ImagesGroup images={[{name: 'Yu Yu Hakusho', path: Yu}, {name: 'Kimetsu no Yaiba', path: Kimetsu}, {name: 'One Piece', path: One}]}/>
+                <ImagesGroup images={[{name: 'Yu Yu Hakusho', path: Yu}, {name: 'Kimetsu no Yaiba', path: Kimetsu}, {name: 'One Piece', path: One}, {name: '1', path: One}, {name: '2', path: One}, {name: '3', path: One}, {name: '4', path: One}, {name: '5', path: One}]}/>
                 <SearchBar/>
             </div>
         </div>
