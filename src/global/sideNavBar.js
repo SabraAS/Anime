@@ -19,7 +19,7 @@
 //     if (props.visible) {
 //         return <div className="sideNavBar">
 //             <div className="sideNavBar__container">
-//                 <dl className="sideNavBar__container--list">
+//                 <dl className="sideNwavBar__container--list">
 //                     <ListItem text="Minha Lista" icon={faDragon} route="/list"/>
 //                     <ListItem text="Informações" icon={faInfinity} route="/info"/>
 //                     <ListItem text="Top 10" icon={faHotjar} route="/top10"/>
