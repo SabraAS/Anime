@@ -1,6 +1,6 @@
 import React from 'react';
 
-import logoWhite from '../assets/logo white.svg';
+import logoWhite from '../../assets/logo white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHotjar } from '@fortawesome/free-brands-svg-icons';
 import {faArrowDown, faDragon, faInfinity} from "@fortawesome/free-solid-svg-icons";

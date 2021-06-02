@@ -12,7 +12,7 @@ import {
     faSearch,
     faSortDown
 } from "@fortawesome/free-solid-svg-icons";
-import logo from "../assets/logo.svg";
+import logo from "../../assets/logo.svg";
 import {faGoogle, faHotjar} from "@fortawesome/free-brands-svg-icons";
 
 function ListItem(props) {

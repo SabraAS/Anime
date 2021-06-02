@@ -2,8 +2,7 @@ import React from "react";
 
 //components import
 import EmptyScreen from "../global/emptyScreen"
-import {faChevronLeft, faChevronRight, faSortDown} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSortDown} from "@fortawesome/free-solid-svg-icons";
 
 function Categories () {
     return (

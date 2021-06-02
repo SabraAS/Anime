@@ -1,4 +1,4 @@
-import logoWhite from "../assets/logo white.svg";
+import logoWhite from "../../assets/logo white.svg";
 import React from "react";
 
 function Footer () {

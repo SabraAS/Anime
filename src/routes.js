@@ -1,20 +1,21 @@
 import React from "react";
 import {
     Switch,
-    Route
+    Route,
+    withRouter
 } from "react-router-dom";
 
-import Home from './pages/homepage.js';
-import List from './pages/list.js';
-import Top10 from './pages/top10.js';
-import Config from './pages/config.js';
-import Info from './pages/info.js';
-import Categories from './pages/categories.js';
-import Navbar from "./global/navbar";
-import Footer from "./global/footer";
+import Home from './comp_ui/pages/homepage.js';
+import List from './comp_ui/pages/list.js';
+import Top10 from './comp_ui/pages/top10.js';
+import Config from './comp_ui/pages/config.js';
+import Info from './comp_ui/pages/info.js';
+import Categories from './comp_ui/pages/categories.js';
+import Navbar from "./comp_ui/global/navbar";
+import Footer from "./comp_ui/global/footer";
 
 
-export default function App() {
+function App() {
     return (
         <div className="app">
             <Navbar/>
@@ -30,3 +31,5 @@ export default function App() {
         </div>
     );
 }
+
+export default withRouter((App));
