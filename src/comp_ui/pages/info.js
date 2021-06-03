@@ -3,17 +3,17 @@ import {connect} from 'react-redux'
 import {getAnimes, getTop10Animes} from '../store/actions/animes'
 
 //components import
-import One from "../../assets/One Piece.png"
-import Kimetsu from "../../assets/Kimetsu no Yaiba.png"
-import Yu from "../../assets/Yu Yu Hakusho.png"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faInfinity, faSearch, faSort, faSortDown, faSortUp} from "@fortawesome/free-solid-svg-icons";
+import {faInfinity, faSearch, faSortDown, faSortUp} from "@fortawesome/free-solid-svg-icons";
+import {bindActionCreators} from "redux";
+import Search from "../global/search";
 
 class Info extends PureComponent {
     state = {
-        top10: [],
+        top10Anime: [],
         currentPage: 1
     }
+
     moveLeft = () => {
         const list = [...this.state.top10]
         let first = list.shift()
@@ -28,46 +28,46 @@ class Info extends PureComponent {
     }
 
     removePage = () => {
-        console.log('remove')
-        const newIndex = this.state.currentPage - 1
-        this.setState({ currentPage: newIndex })
-        this.props.getAnimes(this.state.currentPage);
+        if(this.state.currentPage > 1) {
+            const newIndex = this.state.currentPage - 1
+            this.setState({ currentPage: newIndex })
+            this.props.getAnimes(newIndex);
+        }
     }
     addPage = () => {
-        console.log('add')
         const newIndex = this.state.currentPage + 1
         this.setState({currentPage: newIndex})
-        this.props.getAnimes(this.state.currentPage);
+        this.props.getAnimes(newIndex);
     }
 
     async componentDidMount() {
+        await this.props.getAnimes(this.state.currentPage);
         await this.props.getTop10Animes();
-        this.props.getAnimes(this.state.currentPage);
-        this.setState({top10: this.props.top10.top10Anime})
+        this.setState({top10Anime: this.props.top10Anime})
         //load all images, this way we have then in cache when user decides to click the button, so they load fast
-        this.state.top10.forEach((anime) => {
+        this.state.top10Anime.forEach((anime) => {
             const img = new Image();
             img.src = anime.path;
         });
     }
-
     render () {
+        const list = this.props.list || []
         return (
             <div className="info">
                 <div className="info__content">
                     <div className="info__content--images">
                         <div className="images">
-                            {this.state.top10.length ?
+                            {this.state.top10Anime.length ?
                                 <div className="images__container">
                                     <div className="images__container--name">
                                         <div className="name">
-                                            <span className="name__text">{this.state.top10[0].name}</span>
+                                            <span className="name__text">{this.state.top10Anime[0].name}</span>
                                         </div>
                                     </div>
-                                    <img className="images__container--first-image" src={this.state.top10[0].path}/>
+                                    <img className="images__container--first-image" src={this.state.top10Anime[0].path}/>
                                     <div className="images__container--images">
-                                        <img className="images__image" src={this.state.top10[1].path}/>
-                                        <img className="images__image" src={this.state.top10[2].path}/>
+                                        <img className="images__image" src={this.state.top10Anime[1].path}/>
+                                        <img className="images__image" src={this.state.top10Anime[2].path}/>
                                     </div>
                                 </div>
                                 : ''
@@ -89,42 +89,38 @@ class Info extends PureComponent {
                                 <span className="search-bar__beginning--text">Veja Animes</span>
                             </div>
                             <div className="search-bar__ending">
-                                <div className="search-bar__ending--search">
-                                    <form className="search" id="search">
-                                        <input className="search__input" type="text"/>
-                                        <FontAwesomeIcon className="search__icon" icon={faSearch}/>
-                                    </form>
-                                </div>
-                                <div className="search-bar__ending--icons">
-                                    <button type="button" className="icons">
-                                        <FontAwesomeIcon className="icons__item" icon={faSortUp} onClick={this.removePage} />
-                                    </button>
-                                    <button type="button" className="icons">
-                                        <FontAwesomeIcon className="icons__item" icon={faSortDown}/>
-                                    </button>
-                                </div>
+                                <Search stayVisible/>
+                                <FontAwesomeIcon className="search-bar__ending--icon" icon={faSortDown} onClick={this.addPage}/>
                             </div>
                         </div>
                     </div>
                     <div className="info__content--list">
                         <div className="list">
-                            <div className="list__item">
-                                <img className="list__item--img" src="img"/>
-                                <span className="list__item--name">Nome</span>
-                                <div className="list__item--separator"/>
-                                <div className="list__item--info">
-                                    <div className="info">
-                                        <span className="info--ep">
-                                            Epsódios: {"qntd ep"}
-                                        </span>
-                                        <span className="info--stars">
-                                            Estrelas: {"*"}
-                                        </span>
+                            {list && list.length &&
+                            list.map((anime, index) => {
+                                return <div className="list__item" key={index}>
+                                    <img className="list__item--image" src={anime.path}/>
+                                    <span className="list__item--name">{anime.name}</span>
+                                    <div className="list__item--separator"/>
+                                    <div className="list__item--info">
+                                        <div className="info">
+                                            <div className="info__text">
+                                                    <span>
+                                                        Epsódios: {anime.ep}
+                                                    </span>
+                                                <span>
+                                                        Estrelas: {"*"}
+                                                    </span>
+                                            </div>
+                                            <div className="info__actions">
+                                                <button className="info__actions--fav">favoritar</button>
+                                                <FontAwesomeIcon className="info__actions--icon" icon={faSortUp} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <button>favoritar</button>
-                                <FontAwesomeIcon className="search-bar__ending--icon" icon={faSortUp} />
-                            </div>
+                            })
+                            }
                         </div>
                     </div>
                 </div>
@@ -134,6 +130,15 @@ class Info extends PureComponent {
 }
 
 
-const mapStateToProps  = (state) => ({top10:state.top10})
+const mapStateToProps = (state) => {
+    return {
+        top10Anime: state.animes.top10Anime,
+        list: state.animes.animeList
+    }
+}
 
-export default connect(mapStateToProps, {getTop10Animes, getAnimes})(Info)
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ getAnimes, getTop10Animes }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Info)

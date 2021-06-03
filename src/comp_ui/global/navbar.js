@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/logo.svg";
 import {faGoogle, faHotjar} from "@fortawesome/free-brands-svg-icons";
+import Search from "./search";
 
 function ListItem(props) {
     const history = useHistory();
@@ -52,7 +53,6 @@ function SideNavBar (props) {
 
 function Navbar() {
     const [visibleSideNavbar, setVisibleSideNavbar] = useState(false)
-    const [search, setSearch] = useState(false)
 
     function setSideNavbarVisibilityInside () {
         if(visibleSideNavbar) {
@@ -60,13 +60,6 @@ function Navbar() {
         } else {
             setVisibleSideNavbar(true)
         }
-    }
-
-    function setSearchButtonVisibility () {
-        setSearch(!search)
-    }
-    const handleKeyPress = (event) => {
-        console.log('procurando');
     }
 
     const history = useHistory();
@@ -85,17 +78,7 @@ function Navbar() {
                 <button type="button" className="button">
                     <FontAwesomeIcon icon={faFire} />
                 </button>
-                {!search &&
-                    <button type="button" className="button" onClick={setSearchButtonVisibility}>
-                        <FontAwesomeIcon icon={faSearch} />
-                    </button>
-                }
-                {search &&
-                    <form className="form" id="search">
-                        <input className="form__input" type="text" placeholder="Procure seu anime"  onKeyPress={handleKeyPress}/>
-                        <FontAwesomeIcon className="form__icon" icon={faSearch} onClick={setSearchButtonVisibility}/>
-                    </form>
-                }
+                <Search placeholder="procure seu anime favorito"/>
                 <button type="button" className="button" onClick={setSideNavbarVisibilityInside}>
                     <FontAwesomeIcon icon={faBars} />
                 </button>

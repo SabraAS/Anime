@@ -45,26 +45,6 @@
         padding: 0;
         font-size: 18px;
       }
-      .form{
-        margin-right: 40px;
-        border-radius: 23px;
-        background: #E7E1E1;
-        padding: 0 20px;
-        &__input{
-          height: 41px;
-          width: 270px;
-          background: #E7E1E1;
-          border: none;
-        }
-        &__icon{
-          cursor: pointer;
-          font-size: 18px;
-          color: #000000;
-          border: none;
-          background: none;
-          padding: 0;
-        }
-      }
     }
   }
 }

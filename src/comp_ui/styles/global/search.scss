@@ -1,0 +1,31 @@
+.search{
+	&__form{
+		margin-right: 40px;
+		border-radius: 23px;
+		background: #E7E1E1;
+		padding: 0 20px;
+		&--input{
+			height: 41px;
+			width: 270px;
+			background: #E7E1E1;
+			border: none;
+		}
+		&--icon{
+			cursor: pointer;
+			font-size: 18px;
+			color: #000000;
+			border: none;
+			background: none;
+			padding: 0;
+		}
+	}
+	&__button{
+			color: #000000;
+			margin-right: 40px;
+			cursor: pointer;
+			border: none;
+			background: none;
+			padding: 0;
+			font-size: 18px;
+	}
+}
