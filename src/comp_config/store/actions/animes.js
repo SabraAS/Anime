@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const url = ''
+const url = 'https://anilist-graphql.p.rapidapi.com/'
 const config = {
     headers: {
+        'x-rapidapi-key': '054aa9228bmsh950bfb7d6e2d0f1p1e706ejsn200aadeffb41',
+        'x-rapidapi-host': 'anilist-graphql.p.rapidapi.com'
     },
 }
 
@@ -12,7 +14,7 @@ export const getTop10Animes = () => async dispatch => {
                 $id:Int ,
                 $sort:[MediaSort]=[POPULARITY_DESC,SCORE_DESC])
                     {
-                        Page(page:$page,perPage:7)
+                        Page(page:$page,perPage:10)
                         {
                             media(
                                 id:$id
