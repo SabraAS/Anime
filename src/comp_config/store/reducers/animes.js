@@ -1,6 +1,7 @@
 const initialState = {
     top10Anime: [],
-    animeList: []
+    animeList: [],
+    favorites: []
 }
 
 export default function animesReducer(state = initialState, action) {
@@ -28,8 +29,15 @@ export default function animesReducer(state = initialState, action) {
                 }
             })
             return {
-                ...state.animeList,
+                ...state,
                 animeList
+            }
+        case 'ADD_FAVORITE':
+            const favorites = [ ...state.favorites ]
+            favorites.push(action.payload)
+            return {
+                ...state,
+                favorites
             }
         default:
             return state

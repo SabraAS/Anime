@@ -1,8 +1,6 @@
 import React, {PureComponent} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
-import Navbar from "./navbar";
-
 
 class Search extends PureComponent {
     state = {

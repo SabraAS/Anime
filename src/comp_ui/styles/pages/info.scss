@@ -192,6 +192,7 @@
                 align-items: center;
                 justify-content: flex-end;
                 &--fav{
+                  cursor: pointer;
                   background: #CB0000;
                   width: 132px;
                   height: 53px;
@@ -208,6 +209,7 @@
                   width: 100px;
                   border-radius: 0;
                   transform: rotate(90deg);
+                  cursor: pointer;
                 }
               }
             }
@@ -215,5 +217,17 @@
         }
       }
     }
+  }
+  &__popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    border: 2px black solid;
+    border-radius: 20px;
   }
 }

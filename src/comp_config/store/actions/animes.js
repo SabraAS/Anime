@@ -1,5 +1,11 @@
 import axios from "axios";
 
+const url = ''
+const config = {
+    headers: {
+    },
+}
+
 export const getTop10Animes = () => async dispatch => {
     const data = {
         query: `query($page:Int = 1,
@@ -22,12 +28,8 @@ export const getTop10Animes = () => async dispatch => {
                         }
                     }`
     };
-    const config = {
-        headers: {
-        },
-    }
     try {
-        const success = await axios.post( '', data, config);
+        const success = await axios.post(url, data, config);
         dispatch({ type: 'GET_TOP10ANIMES', payload: success.data });
     } catch (error) {
         console.log(error);
@@ -66,14 +68,14 @@ export const getAnimes = (currentPage) => async dispatch => {
                         }
                     }`
     };
-    const config = {
-        headers: {
-        }
-    };
     try {
-        const success = await axios.post('', data, config);
+        const success = await axios.post(url, data, config);
         dispatch({ type: 'GET_ANIMES', payload: success.data });
     } catch (error) {
         console.log(error);
     }
+}
+
+export const addFavorite = ({id, name, path}) => async dispatch => {
+    dispatch({ type: 'ADD_FAVORITE', payload: {id, name, path} });
 }

@@ -1,43 +1,50 @@
 import React, {PureComponent} from "react";
 import {connect} from 'react-redux'
-import {getAnimes, getTop10Animes} from '../store/actions/animes'
+import {addFavorite, getAnimes, getTop10Animes} from '../../comp_config/store/actions/animes'
 
 //components import
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faInfinity, faSearch, faSortDown, faSortUp} from "@fortawesome/free-solid-svg-icons";
+import {faInfinity, faSort, faSortUp} from "@fortawesome/free-solid-svg-icons";
 import {bindActionCreators} from "redux";
 import Search from "../global/search";
 
 class Info extends PureComponent {
     state = {
         top10Anime: [],
-        currentPage: 1
+        currentPage: 1,
+        currentAnime: {},
+        popup: false
     }
 
     moveLeft = () => {
-        const list = [...this.state.top10]
+        const list = [...this.state.top10Anime]
         let first = list.shift()
         list.push(first)
-        this.setState({top10: list})
+        this.setState({top10Anime: list})
     }
     moveRight = () => {
-        const list = [...this.state.top10]
+        const list = [...this.state.top10Anime]
         let last = list.pop()
         list.unshift(last)
-        this.setState({top10: list})
+        this.setState({top10Anime: list})
     }
 
-    removePage = () => {
-        if(this.state.currentPage > 1) {
-            const newIndex = this.state.currentPage - 1
-            this.setState({ currentPage: newIndex })
-            this.props.getAnimes(newIndex);
-        }
-    }
     addPage = () => {
         const newIndex = this.state.currentPage + 1
         this.setState({currentPage: newIndex})
         this.props.getAnimes(newIndex);
+    }
+    addToFavorites = async (payload) => {
+        const id = payload.id
+        const name = payload.name
+        const path = payload.path
+        await this.props.addFavorite({id, name, path})
+        console.log('Favorites', this.props.favorites)
+    }
+    popup = (payload) => {
+        this.setState({currentAnime: payload})
+        const now = this.state.popup
+        this.setState({popup: !now})
     }
 
     async componentDidMount() {
@@ -64,10 +71,10 @@ class Info extends PureComponent {
                                             <span className="name__text">{this.state.top10Anime[0].name}</span>
                                         </div>
                                     </div>
-                                    <img className="images__container--first-image" src={this.state.top10Anime[0].path}/>
+                                    <img className="images__container--first-image" src={this.state.top10Anime[0].path} alt="anime"/>
                                     <div className="images__container--images">
-                                        <img className="images__image" src={this.state.top10Anime[1].path}/>
-                                        <img className="images__image" src={this.state.top10Anime[2].path}/>
+                                        <img className="images__image" src={this.state.top10Anime[1].path} alt="anime"/>
+                                        <img className="images__image" src={this.state.top10Anime[2].path} alt="anime"/>
                                     </div>
                                 </div>
                                 : ''
@@ -90,40 +97,51 @@ class Info extends PureComponent {
                             </div>
                             <div className="search-bar__ending">
                                 <Search stayVisible/>
-                                <FontAwesomeIcon className="search-bar__ending--icon" icon={faSortDown} onClick={this.addPage}/>
+                                <FontAwesomeIcon className="search-bar__ending--icon" icon={faSort} onClick={this.addPage}/>
                             </div>
                         </div>
                     </div>
                     <div className="info__content--list">
                         <div className="list">
                             {list && list.length &&
-                            list.map((anime, index) => {
-                                return <div className="list__item" key={index}>
-                                    <img className="list__item--image" src={anime.path}/>
-                                    <span className="list__item--name">{anime.name}</span>
-                                    <div className="list__item--separator"/>
-                                    <div className="list__item--info">
-                                        <div className="info">
-                                            <div className="info__text">
+                                list.map((anime, index) => {
+                                    return <div className="list__item" key={index}>
+                                        <img className="list__item--image" src={anime.path} alt="anime"/>
+                                        <span className="list__item--name">{anime.name}</span>
+                                        <div className="list__item--separator"/>
+                                        <div className="list__item--info">
+                                            <div className="info">
+                                                <div className="info__text">
+                                                        <span>
+                                                            Epsódios: {anime.ep}
+                                                        </span>
                                                     <span>
-                                                        Epsódios: {anime.ep}
-                                                    </span>
-                                                <span>
-                                                        Estrelas: {"*"}
-                                                    </span>
-                                            </div>
-                                            <div className="info__actions">
-                                                <button className="info__actions--fav">favoritar</button>
-                                                <FontAwesomeIcon className="info__actions--icon" icon={faSortUp} />
+                                                            Popularidade: {anime.popularity}
+                                                        </span>
+                                                </div>
+                                                <div className="info__actions">
+                                                    <button className="info__actions--fav" onClick={() => {this.addToFavorites(anime)}}>
+                                                        favoritar
+                                                    </button>
+                                                    <FontAwesomeIcon className="info__actions--icon" icon={faSortUp} onClick={() => {this.popup(anime)}}/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            })
+                                })
                             }
                         </div>
                     </div>
                 </div>
+                {this.state.popup ?
+                    <div className="info__popup">
+                        <p>Name: {this.state.currentAnime.name}</p>
+                        <p>Number of Ep: {this.state.currentAnime.ep}</p>
+                        <p>Popularity: {this.state.currentAnime.popularity}</p>
+                        <p>Average Score: {this.state.currentAnime.averageScore}</p>
+                    </div>
+                    : ''
+                }
             </div>
         )
     }
@@ -133,12 +151,13 @@ class Info extends PureComponent {
 const mapStateToProps = (state) => {
     return {
         top10Anime: state.animes.top10Anime,
-        list: state.animes.animeList
+        list: state.animes.animeList,
+        favorites: state.animes.favorites
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ getAnimes, getTop10Animes }, dispatch)
+    return bindActionCreators({ getAnimes, getTop10Animes, addFavorite }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Info)
